@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Arrow, FilesIcon, FolderCloseIcon } from './assets/icons'
+import { GET_ALL_FILES } from '../../common/const'
 
 interface ITree {
   name: string
@@ -7,10 +8,12 @@ interface ITree {
 }
 export const App = () => {
   const [sideWidth, setSideWidth] = useState(240)
-  const [tree, setTree] = useState<ITree[]>([
-    { name: 'book' },
-    { name: 'folder', children: [] }
-  ])
+  const [tree, setTree] = useState<ITree[]>([{ name: 'book' }, { name: 'folder', children: [] }])
+  useEffect(() => {
+    window.api.interProcess(GET_ALL_FILES).then((f) => {
+      console.log(f)
+    })
+  }, [])
   return (
     <div className="w-[100vw] h-[100vh] flex">
       <div className="w-[50px] h-full flex flex-col items-center bg-[#283042] text-slate-100 p-[6px]">
@@ -21,25 +24,27 @@ export const App = () => {
         onMouseDown={handleMouseDown}
         style={{
           left: sideWidth + 50 - 2 + 'px'
-        }}></div>
+        }}
+      ></div>
       <div
         className=" h-full bg-[#333d55]  overflow-scroll"
         style={{
           width: sideWidth
-        }}>
+        }}
+      >
         <ul className="text-slate-200">{renderTree(tree)}</ul>
       </div>
       <main></main>
     </div>
   )
   function handleMouseDown() {
-    document.onmousemove = e => {
+    document.onmousemove = (e) => {
       const newClientX = e.clientX
       setSideWidth(newClientX - 50)
       return false
     }
     // 释放鼠标的时候解除事件绑定
-    document.onmouseup = e => {
+    document.onmouseup = (e) => {
       const newPosition = e.clientX
       if (newPosition < 180 || newPosition > 600) {
       }
@@ -49,7 +54,7 @@ export const App = () => {
     }
   }
   function renderTree(tree: ITree[]) {
-    return tree.map(node => {
+    return tree.map((node) => {
       if (node.children) {
         return (
           <ul>
@@ -71,10 +76,7 @@ function File(node: ITree) {
     <li className="flex text-slate-100 justify-start items-center h-[30px] [&>button]:w-[20px]">
       {node.children && (
         <>
-          <Arrow
-            onClick={handleClick}
-            className={`p-[3px] ${isOpen ? '-rotate-90' : ''}`}
-          />
+          <Arrow onClick={handleClick} className={`p-[3px] ${isOpen ? '-rotate-90' : ''}`} />
           <FolderCloseIcon />
         </>
       )}
