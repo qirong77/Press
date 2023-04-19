@@ -6,7 +6,8 @@ import { createWindow } from './electron/createWindow'
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')
-  createWindow()
+  const mainWindow = createWindow()
+  mainWindow.webContents.openDevTools()
   onEvents()
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)

@@ -10,15 +10,15 @@ export const getAllFiles = () => {
       fileName: basename(path),
       children: [],
       path,
-      level
+      level,
+      isDir: false
     }
+    if (!lstatSync(path).isDirectory()) return node
+    node.isDir = true
     readdirSync(path).forEach((fileName) => {
       if (/^\./.test(fileName)) return
       const nextPath = resolve(path, fileName)
-      if (lstatSync(nextPath).isDirectory()) {
-        const childNode = dfs(nextPath, level + 1)
-        node.children.push(childNode)
-      }
+      node.children.push(dfs(nextPath, level + 1))
     })
     // 如果当前节点是文件夹就对里面的文件进行排序，文件排前面，文件夹排后面
     const folders = node.children.filter((child) => lstatSync(child.path).isDirectory())
@@ -27,6 +27,5 @@ export const getAllFiles = () => {
     return node
   }
   const tree = dfs(targetFolder, 0)
-  console.log(tree)
-  return []
+  return [tree]
 }

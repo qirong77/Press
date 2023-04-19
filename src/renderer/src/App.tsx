@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Arrow, FilesIcon, FolderCloseIcon } from './assets/icons'
+import { FilesIcon, } from './assets/icons'
 import { GET_ALL_FILES } from '../../common/const'
+import { PressFile } from '../../common/types'
+import { FileTree } from './components/FileTree'
 
-interface ITree {
-  name: string
-  children?: ITree[]
-}
 export const App = () => {
   const [sideWidth, setSideWidth] = useState(240)
-  const [tree, setTree] = useState<ITree[]>([{ name: 'book' }, { name: 'folder', children: [] }])
+  const [file, setFile] = useState<PressFile>({})
   useEffect(() => {
-    window.api.interProcess(GET_ALL_FILES).then((f) => {
+    window.api.interProcess(GET_ALL_FILES).then((value) => {
+      const [f, _p] = value
       console.log(f)
+      setFile(f)
     })
   }, [])
   return (
@@ -32,7 +32,7 @@ export const App = () => {
           width: sideWidth
         }}
       >
-        <ul className="text-slate-200">{renderTree(tree)}</ul>
+        <ul className="text-slate-200"><FileTree file={file}/></ul>
       </div>
       <main></main>
     </div>
@@ -44,43 +44,10 @@ export const App = () => {
       return false
     }
     // 释放鼠标的时候解除事件绑定
-    document.onmouseup = (e) => {
-      const newPosition = e.clientX
-      if (newPosition < 180 || newPosition > 600) {
-      }
+    document.onmouseup = (_e) => {
       document.onmousemove = null
       document.onmouseup = null
       return false
     }
   }
-  function renderTree(tree: ITree[]) {
-    return tree.map((node) => {
-      if (node.children) {
-        return (
-          <ul>
-            {File(node)}
-            {renderTree(node.children)}
-          </ul>
-        )
-      }
-      return File(node)
-    })
-  }
-}
-function File(node: ITree) {
-  const [isOpen, setIsOpen] = useState(false)
-  const handleClick = () => {
-    setIsOpen(!isOpen)
-  }
-  return (
-    <li className="flex text-slate-100 justify-start items-center h-[30px] [&>button]:w-[20px]">
-      {node.children && (
-        <>
-          <Arrow onClick={handleClick} className={`p-[3px] ${isOpen ? '-rotate-90' : ''}`} />
-          <FolderCloseIcon />
-        </>
-      )}
-      <span className="ml-1">{node.name}</span>
-    </li>
-  )
 }
