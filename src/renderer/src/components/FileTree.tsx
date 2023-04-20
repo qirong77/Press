@@ -8,7 +8,7 @@ export const FileTree = ({ file }) => {
 }
 
 function Folder({ file, childs }) {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(file.level === 0 ? true : false)
   return (
     <ul
       className="overflow-hidden"

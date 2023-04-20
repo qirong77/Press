@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { FilesIcon, } from './assets/icons'
+import { FilesIcon, SearchIcon, } from './assets/icons'
 import { GET_ALL_FILES } from '../../common/const'
 import { PressFile } from '../../common/types'
 import { FileTree } from './components/FileTree'
@@ -16,8 +16,9 @@ export const App = () => {
   }, [])
   return (
     <div className="w-[100vw] h-[100vh] flex">
-      <div className="w-[50px] h-full flex flex-col items-center bg-[#283042] text-slate-100 p-[6px]">
+      <div className="w-[50px] h-full flex flex-col items-center bg-[#283042] text-slate-100 p-[10px] [&>button]:my-1">
         <FilesIcon />
+        <SearchIcon/>
       </div>
       <div
         className="fixed w-[4px] h-full cursor-move hover:bg-blue-400"
