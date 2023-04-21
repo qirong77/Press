@@ -17,7 +17,7 @@ function Folder({ file, childs }) {
       }}
     >
       <li
-        className="flex text-slate-100 justify-start items-center h-[30px] overflow-hidden whitespace-nowrap"
+        className="flex text-slate-100 justify-start items-center h-[30px] overflow-hidden whitespace-nowrap cursor-pointer"
         style={{
           paddingLeft: file.level * 20 - 20 + 'px',
           display: file.level === 0 ? 'none' : 'flex'
@@ -39,7 +39,7 @@ function Folder({ file, childs }) {
 function FileItem({ file }) {
   return (
     <li
-      className="flex text-slate-100 justify-start items-center h-[30px] overflow-hidden whitespace-nowrap"
+      className="flex text-slate-100 justify-start items-center h-[30px] overflow-hidden whitespace-nowrap cursor-pointer"
       style={{
         paddingLeft: file.level * 20 - 20 + 'px',
         display: file.level === 0 ? 'none' : 'flex'
