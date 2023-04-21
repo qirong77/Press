@@ -11,7 +11,6 @@ export const App = () => {
   useEffect(() => {
     window.api.interProcess(GET_ALL_FILES).then((value) => {
       const [f, _p] = value
-      console.log(f)
       setFile(f)
     })
   }, [])
