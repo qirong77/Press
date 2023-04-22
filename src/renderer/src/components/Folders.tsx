@@ -1,10 +1,54 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { Arrow, FolderCloseIcon } from '../assets/icons'
-import { GET_FILE_CONTENT } from '../../../common/const'
+import { GET_ALL_FILES, GET_FILE_CONTENT } from '../../../common/const'
 import { PressFile } from '../../../common/types'
 
-export function RenderFiles({ file, onOpenFile }) {
-  return <FileTree file={file} />
+export const Folders = ({ onOpenFile }) => {
+  const [sideWidth, setSideWidth] = useState(240)
+  const [fileData, setFileData] = useState<PressFile>()
+  useEffect(() => {
+    window.api.interProcess(GET_ALL_FILES).then((value) => {
+      const [f, _p] = value
+      setFileData(f)
+    })
+  }, [])
+  return (
+    <div>
+      <div
+        className="fixed w-[6px]  h-full cursor-move hover:bg-blue-400 active:bg-blue-400 z-10"
+        onMouseDown={handleMouseDown}
+        style={{
+          left: sideWidth + 45 - 3 + 'px'
+        }}
+      ></div>
+      <div
+        className="h-full min-w-[220px] bg-[#333d55]  overflow-scroll"
+        style={{
+          width: sideWidth
+        }}
+      >
+        <RenderFiles fileData={fileData} onOpenFile={onOpenFile} />
+      </div>
+    </div>
+  )
+  function handleMouseDown() {
+    document.onmousemove = (e) => {
+      const newClientX = e.clientX
+      setSideWidth(newClientX - 50)
+      return false
+    }
+    // 释放鼠标的时候解除事件绑定
+    document.onmouseup = (_e) => {
+      document.onmousemove = null
+      document.onmouseup = null
+      return false
+    }
+  }
+}
+
+function RenderFiles({ fileData, onOpenFile }) {
+  if (!fileData) return <div></div>
+  return <FileTree file={fileData} />
   function FileTree({ file }) {
     if (file.isDir) {
       const childs = file.children.map((child) => <FileTree key={child.path} file={child} />)
