@@ -1,3 +1,7 @@
 export const GET_ALL_FILES = 'get all files'
 export const GET_FILE_CONTENT = 'get file content'
 export const SAVE_FILE = 'save file'
+export const FILE_MENU = 'file menu'
+export const FOLDER_MENU = 'folder menu'
+export const RENAME_FILE = 'rename file'
+export const NEW_FILE = 'new file'
