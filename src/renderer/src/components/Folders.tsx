@@ -1,7 +1,8 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useMemo,  useState } from 'react'
 import { Arrow, FolderCloseIcon } from '../assets/icons'
 import { GET_ALL_FILES, GET_FILE_CONTENT } from '../../../common/const'
 import { PressFile } from '../../../common/types'
+import React from 'react'
 
 export const Folders = ({ onOpenFile }) => {
   const [sideWidth, setSideWidth] = useState(240)
@@ -29,6 +30,7 @@ export const Folders = ({ onOpenFile }) => {
       >
         <RenderFiles fileData={fileData} onOpenFile={onOpenFile} />
       </div>
+      0
     </div>
   )
   function handleMouseDown() {
@@ -47,16 +49,19 @@ export const Folders = ({ onOpenFile }) => {
 }
 
 function RenderFiles({ fileData, onOpenFile }) {
+  const [active, setActive] = useState('')
+  // 嵌套的组件,每次更新都重新更新并执行整个函数,所以需要再外层进行状态存储
+  const folderStatus = useMemo(() => new Map(), [])
   if (!fileData) return <div></div>
   return <FileTree file={fileData} />
   function FileTree({ file }) {
     if (file.isDir) {
       const childs = file.children.map((child) => <FileTree key={child.path} file={child} />)
-      return <Folder file={file} childs={childs} />
-    } else return <FileItem file={file} />
+      return <Folder file={file} childs={childs}></Folder>
+    } else return <FileItem file={file} setActive={setActive} />
   }
   function Folder({ file, childs }) {
-    const [isOpen, setIsOpen] = useState(file.level === 0 ? true : false)
+    const [isOpen, setIsOpen] = useState(file.level === 0 ? true : folderStatus.get(file.path))
     return (
       <ul
         className="overflow-hidden"
@@ -66,8 +71,9 @@ function RenderFiles({ fileData, onOpenFile }) {
       >
         <FileItem
           file={file}
-          onClick={() => {
-            if (file.level !== 0) setIsOpen(!isOpen)
+          toggleOpen={() => {
+            folderStatus.set(file.path, !isOpen)
+            setIsOpen(!isOpen)
           }}
         >
           {file.isDir && (
@@ -84,18 +90,20 @@ function RenderFiles({ fileData, onOpenFile }) {
   function FileItem({
     file,
     children,
-    onClick
+    setActive,
+    toggleOpen
   }: {
     file: PressFile
     children?: ReactNode
-    onClick?: Function
+    toggleOpen?: Function
+    setActive?: Function
   }) {
-    const handleClick = () => {
-      onClick?.()
-      !file.isDir &&
-        window.api.interProcess(GET_FILE_CONTENT, file.path).then((value) => {
-          onOpenFile(file.path, value)
-        })
+    const handleClick = (e: React.MouseEvent) => {
+      e.stopPropagation()
+      if (!file.isDir) {
+        onOpenFile(file.path)
+        setActive?.(file.path)
+      } else toggleOpen?.()
     }
     return (
       <li
@@ -103,7 +111,8 @@ function RenderFiles({ fileData, onOpenFile }) {
         className="flex text-slate-100 hover:bg-[#3c4b6f]  justify-start items-center h-[30px] overflow-hidden whitespace-nowrap cursor-pointer"
         style={{
           paddingLeft: file.level * 20 - 20 + 'px',
-          display: file.level === 0 ? 'none' : 'flex'
+          display: file.level === 0 ? 'none' : 'flex',
+          backgroundColor: active === file.path ? '#3c4b6f' : ''
         }}
       >
         <div className="flex [&>button]:w-[20px]">{children}</div>
