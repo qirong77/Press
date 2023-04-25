@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'fs'
 import { resolve } from 'path'
 import { GET_ALL_FILES } from '../../../common/const'
 
-export const createFile = (e:Electron.IpcMainEvent,folder = '', name = '', isDir: boolean) => {
+export const createFile = (e: Electron.IpcMainEvent, folder = '', name = '', isDir: boolean) => {
   const newPath = resolve(folder, name)
   if (existsSync(newPath)) {
     dialog.showMessageBoxSync({
@@ -12,6 +12,6 @@ export const createFile = (e:Electron.IpcMainEvent,folder = '', name = '', isDir
     })
     return
   }
-  isDir ? mkdirSync(newPath) : writeFileSync(newPath, '', 'utf-8')
+  isDir ? mkdirSync(newPath) : writeFileSync(newPath, JSON.stringify([]), 'utf-8')
   e.sender.send(GET_ALL_FILES)
 }

@@ -14,10 +14,6 @@ import { rename } from 'fs/promises'
 import { basename, resolve } from 'path'
 export const onRenderer = () => {
   ipcMain.on(SAVE_FILE, (_e, filePath, content = '') => {
-    if (content.includes('undefined')) {
-      console.log(filePath, content)
-      throw new Error('保存可能除了问题')
-    }
     existsSync(filePath) && writeFileSync(filePath, content, 'utf-8')
   })
   ipcMain.on(FILE_MENU, (_e, arg) => hanldeFileMenu(arg))

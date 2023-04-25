@@ -36,7 +36,6 @@ export const handleFolderMenu = (path: string) => {
     {
       label: '新建文件夹',
       click(_menuItem, browserWindow, _event) {
-        console.log(NEW_FOLDER)
         browserWindow?.webContents.send(NEW_FOLDER)
       }
     },

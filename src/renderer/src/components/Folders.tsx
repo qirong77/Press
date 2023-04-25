@@ -39,6 +39,9 @@ export const Folders = ({ onOpenFile }) => {
         style={{
           width: sideWidth
         }}
+        onContextMenu={() => {
+          window.api.sendToMain(FOLDER_MENU, fileData?.path)
+        }}
       >
         <RenderFiles fileData={fileData} onOpenFile={onOpenFile} />
       </div>
@@ -68,11 +71,11 @@ export const Folders = ({ onOpenFile }) => {
         setRename(contextActive)
       }
       const handleNewFile = () => {
-        setNewFile(contextActive)
+        setNewFile(contextActive || fileData?.path || '')
         setIsNewFolder(false)
       }
       const handleNewFolder = () => {
-        setNewFile(contextActive)
+        setNewFile(contextActive || fileData?.path || '')
         setIsNewFolder(true)
       }
       window.api.onMain(NEW_FILE, handleNewFile)
@@ -83,7 +86,7 @@ export const Folders = ({ onOpenFile }) => {
         window.electron.ipcRenderer.removeListener(NEW_FOLDER, handleNewFolder)
         window.electron.ipcRenderer.removeListener(RENAME_FILE, hanldeRename)
       }
-    }, [contextActive])
+    }, [contextActive, fileData])
     if (!fileData) return <div></div>
     return (
       <>
@@ -123,7 +126,7 @@ export const Folders = ({ onOpenFile }) => {
             )}
           </FileItem>
           {newFile === file.path && (
-            <li className="flex items-center h-[30px] text-white py-[2px]">
+            <li className="flex items-center h-[30px] text-white p-[2px]">
               {isNewFolder && (
                 <div className="mx-[6px] [&>button]:w-[20px]">
                   <FolderCloseIcon />
@@ -163,6 +166,7 @@ export const Folders = ({ onOpenFile }) => {
       }
       const handleContext = (e: React.MouseEvent) => {
         e.preventDefault()
+        e.stopPropagation()
         setContextActive(file.path)
         window.api.sendToMain(file.isDir ? FOLDER_MENU : FILE_MENU, file.path)
       }
