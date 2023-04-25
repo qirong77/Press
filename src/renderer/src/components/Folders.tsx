@@ -1,6 +1,13 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { Arrow, FolderCloseIcon } from '../assets/icons'
-import { FILE_MENU, FOLDER_MENU, GET_ALL_FILES, RENAME_FILE } from '../../../common/const'
+import {
+  FILE_MENU,
+  FOLDER_MENU,
+  GET_ALL_FILES,
+  NEW_FILE,
+  NEW_FOLDER,
+  RENAME_FILE
+} from '../../../common/const'
 import { PressFile } from '../../../common/types'
 import React from 'react'
 
@@ -51,22 +58,35 @@ export const Folders = ({ onOpenFile }) => {
     }
   }
   function RenderFiles({ fileData, onOpenFile }) {
-    const [active, setActive] = useState('active')
+    const [active, setActive] = useState('')
     const [contextActive, setContextActive] = useState('')
-    const [rename, setRename] = useState('rename')
+    const [rename, setRename] = useState('')
+    const [newFile, setNewFile] = useState('')
+    const [isNewFolder, setIsNewFolder] = useState(false)
     useEffect(() => {
       const hanldeRename = () => {
         setRename(contextActive)
       }
+      const handleNewFile = () => {
+        setNewFile(contextActive)
+        setIsNewFolder(false)
+      }
+      const handleNewFolder = () => {
+        setNewFile(contextActive)
+        setIsNewFolder(true)
+      }
+      window.api.onMain(NEW_FILE, handleNewFile)
+      window.api.onMain(NEW_FOLDER, handleNewFolder)
       window.api.onMain(RENAME_FILE, hanldeRename)
       return () => {
+        window.electron.ipcRenderer.removeListener(NEW_FILE, handleNewFile)
+        window.electron.ipcRenderer.removeListener(NEW_FOLDER, handleNewFolder)
         window.electron.ipcRenderer.removeListener(RENAME_FILE, hanldeRename)
       }
     }, [contextActive])
     if (!fileData) return <div></div>
     return (
       <>
-        <span>{contextActive}</span>
         <FileTree file={fileData} />
       </>
     )
@@ -78,6 +98,9 @@ export const Folders = ({ onOpenFile }) => {
     }
     function Folder({ file, childs }) {
       const [isOpen, setIsOpen] = useState(file.level === 0 ? true : folderStatus.get(file.path))
+      useEffect(() => {
+        if (newFile === file.path) setIsOpen(true)
+      }, [newFile])
       return (
         <ul
           className="overflow-hidden"
@@ -99,6 +122,26 @@ export const Folders = ({ onOpenFile }) => {
               </>
             )}
           </FileItem>
+          {newFile === file.path && (
+            <li className="flex items-center h-[30px] text-white py-[2px]">
+              {isNewFolder && (
+                <div className="mx-[6px] [&>button]:w-[20px]">
+                  <FolderCloseIcon />
+                </div>
+              )}
+              <input
+                className="pl-[4px] text-black rounded"
+                autoFocus
+                onBlur={(e) => {
+                  if (e.target.value) {
+                    window.api.sendToMain(NEW_FILE, file.path, e.target.value, isNewFolder)
+                  }
+                  setNewFile('')
+                }}
+                type="text"
+              />
+            </li>
+          )}
           {childs}
         </ul>
       )
@@ -114,7 +157,6 @@ export const Folders = ({ onOpenFile }) => {
       toggleOpen?: Function
       setActive?: Function
     }) {
-      const iptRef = useRef<HTMLInputElement>(null)
       const handleClick = (e: React.MouseEvent) => {
         e.stopPropagation()
         file.isDir ? toggleOpen?.() : onOpenFile(file.path) && setActive?.(file.path)
@@ -124,9 +166,6 @@ export const Folders = ({ onOpenFile }) => {
         setContextActive(file.path)
         window.api.sendToMain(file.isDir ? FOLDER_MENU : FILE_MENU, file.path)
       }
-      useEffect(() => {
-        iptRef.current?.focus()
-      }, [])
       const handleKeyDown = (_e) => {}
       return (
         <li
@@ -143,10 +182,12 @@ export const Folders = ({ onOpenFile }) => {
           <div className="ml-1">
             {file.path === rename ? (
               <input
-                ref={iptRef}
+                autoFocus
                 onClick={(e) => e.stopPropagation()}
-                onBlur={() => {
-                  console.log(123)
+                onBlur={(e) => {
+                  if (e.target.value) {
+                    window.api.sendToMain(RENAME_FILE, file.path, e.target.value)
+                  }
                   setRename('')
                 }}
                 onKeyDown={handleKeyDown}

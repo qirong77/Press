@@ -1,12 +1,13 @@
 import { lstatSync, readdirSync } from 'fs'
 import { homedir } from 'os'
 import { basename, join, resolve } from 'path'
+import { PressFile } from '../../../common/types'
 
 export const getAllFiles = () => {
   const paths: string[] = []
   const targetFolder = join(homedir(), 'Desktop', 'press-test')
   const dfs = (path: string, level = 0) => {
-    const node = {
+    const node: PressFile = {
       fileName: basename(path),
       children: [],
       path,

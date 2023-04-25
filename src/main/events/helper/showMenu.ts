@@ -1,6 +1,6 @@
 import { Menu, MenuItemConstructorOptions } from 'electron'
-import { lstatSync, readdirSync, rmdirSync, statSync, unlinkSync } from 'fs'
-import { GET_ALL_FILES, NEW_FILE, RENAME_FILE } from '../../../common/const'
+import {  readdirSync, rmdirSync, statSync, unlinkSync } from 'fs'
+import { GET_ALL_FILES, NEW_FILE, NEW_FOLDER, RENAME_FILE } from '../../../common/const'
 import { resolve } from 'path'
 
 export interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
@@ -36,7 +36,8 @@ export const handleFolderMenu = (path: string) => {
     {
       label: '新建文件夹',
       click(_menuItem, browserWindow, _event) {
-        browserWindow?.webContents.send(NEW_FILE)
+        console.log(NEW_FOLDER)
+        browserWindow?.webContents.send(NEW_FOLDER)
       }
     },
     {
