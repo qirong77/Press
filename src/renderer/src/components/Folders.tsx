@@ -4,6 +4,7 @@ import {
   FILE_MENU,
   FOLDER_MENU,
   GET_ALL_FILES,
+  MOVE_FILE,
   NEW_FILE,
   NEW_FOLDER,
   RENAME_FILE
@@ -99,16 +100,32 @@ export const Folders = ({ onOpenFile }) => {
         return <Folder file={file} childs={childs}></Folder>
       } else return <FileItem file={file} setActive={setActive} />
     }
-    function Folder({ file, childs }) {
+    function Folder({ file, childs }: { file: PressFile; childs: ReactNode }) {
       const [isOpen, setIsOpen] = useState(file.level === 0 ? true : folderStatus.get(file.path))
+      const [isDrag, setIsDrag] = useState(false)
       useEffect(() => {
         if (newFile === file.path) setIsOpen(true)
       }, [newFile])
       return (
         <ul
+          onDragOver={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            setIsDrag(true)
+          }}
+          onDragLeave={() => {
+            setIsDrag(false)
+          }}
+          onDrop={(e) => {
+            e.stopPropagation()
+            setIsDrag(false)
+            const path = e.dataTransfer.getData('path')
+            window.api.sendToMain(MOVE_FILE, path, file.path)
+          }}
           className="overflow-hidden"
           style={{
-            height: isOpen ? 'auto' : '30px'
+            height: file.level === 0 ? '100%' : isOpen ? 'auto' : '30px',
+            backgroundColor: isDrag ? '#283042' : ''
           }}
         >
           <FileItem
@@ -170,9 +187,22 @@ export const Folders = ({ onOpenFile }) => {
         setContextActive(file.path)
         window.api.sendToMain(file.isDir ? FOLDER_MENU : FILE_MENU, file.path)
       }
-      const handleKeyDown = (_e) => {}
+      const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.code === 'Enter') {
+          const target = e.target as HTMLInputElement
+          if (target.value) {
+            window.api.sendToMain(RENAME_FILE, file.path, target.value)
+          }
+          setRename('')
+        }
+      }
+      const handleDragStart = (e: React.DragEvent) => {
+        e.stopPropagation()
+        e.dataTransfer?.setData('path', file.path)
+      }
       return (
         <li
+          draggable
           onClick={handleClick}
           onContextMenu={handleContext}
           className="flex text-slate-100 hover:bg-[#3c4b6f]  justify-start items-center h-[30px] overflow-hidden whitespace-nowrap cursor-pointer"
@@ -181,6 +211,7 @@ export const Folders = ({ onOpenFile }) => {
             display: file.level === 0 ? 'none' : 'flex',
             backgroundColor: active === file.path ? '#3c4b6f' : ''
           }}
+          onDragStart={handleDragStart}
         >
           <div className="flex [&>button]:w-[20px]">{children}</div>
           <div className="ml-1">

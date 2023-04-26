@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react'
 import { FilesIcon, SearchIcon } from './assets/icons'
-import { SlatePad, RichUtils, createSlatepad } from 'slatepad'
+import { SlatePad, EditorUtils, createSlatepad } from 'slatepad'
 import 'slatepad/dist/style.css'
 import { Folders } from './components/Folders'
 import { GET_FILE_CONTENT, SAVE_FILE } from '../../common/const'
@@ -15,9 +15,9 @@ export const App = () => {
     window.api.sendToMain(SAVE_FILE, pathRef.current, JSON.stringify(editor.children))
     pathRef.current = path
     const fileContent = await window.api.interProcess(GET_FILE_CONTENT, path)
-    RichUtils.clearAll(editor)
+    EditorUtils.clearAll(editor)
     editor.insertFragment(JSON.parse(fileContent))
-    RichUtils.clearHistory(editor)
+    EditorUtils.clearHistory(editor)
   }
   return (
     <div className="w-[100vw] h-[100vh] flex">
