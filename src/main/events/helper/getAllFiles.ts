@@ -4,7 +4,7 @@ import { basename, join, resolve } from 'path'
 import { PressFile } from '../../../common/types'
 
 export const getAllFiles = () => {
-  const paths: string[] = []
+  const paths: any[] = []
   const targetFolder = join(homedir(), 'Desktop', 'press-test')
   const dfs = (path: string, level = 0) => {
     const node: PressFile = {
@@ -14,7 +14,13 @@ export const getAllFiles = () => {
       level,
       isDir: false
     }
-    if (!lstatSync(path).isDirectory()) return node
+    if (!lstatSync(path).isDirectory()) {
+      paths.push({
+        path,
+        name: basename(path)
+      })
+      return node
+    }
     node.isDir = true
     readdirSync(path).forEach((fileName) => {
       if (/^\./.test(fileName)) return
