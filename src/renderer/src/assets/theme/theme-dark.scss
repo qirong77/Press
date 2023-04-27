@@ -1,0 +1,78 @@
+$dark-01: #21252a;
+$dark-02: #282c34;
+$dark-03: #2c313a;
+$font-01: rgb(231, 231, 231);
+$font-02: #abb2bf;
+input {
+  background-color: $dark-01;
+  outline: none !important;
+  border: 1px solid $dark-01 !important;
+  &:focus {
+    border-color: $font-02 !important;
+  }
+}
+.activity-bar {
+  background-color: $dark-01;
+  .icon {
+    color: $font-02;
+  }
+  .icon-active {
+    color: $font-01;
+  }
+}
+.title-bar {
+  background-color: #21252a;
+  -webkit-app-region: drag;
+}
+.drag-line {
+  &:active {
+    background-color: $dark-03;
+  }
+}
+.folder {
+  background-color: $dark-01;
+  color: $font-02;
+  .file-item {
+    &:hover {
+      background-color: $dark-03;
+      color: $font-01;
+    }
+  }
+  .file-item-active {
+    background-color: $dark-03;
+    color: $font-01;
+  }
+}
+main {
+  background-color: $dark-02;
+  .slatepad {
+    color: $font-02;
+    background-color: $dark-02;
+    button.slatepad-icon {
+      &:hover {
+        background-color: $dark-01;
+        color: $font-01;
+      }
+    }
+    .slatepad-toolbar {
+      border: none;
+      box-shadow: 2px 0px 8px 0px rgb(4 4 4 / 20%);
+    }
+    .slatepad-code-block {
+      background-color: $dark-03;
+      box-shadow: 2px 0px 8px 0px rgb(4 4 4 / 3%);
+    }
+    .slatepad-heading {
+      // 标题图层
+      & > :nth-child(2) {
+        position: relative;
+        z-index: 2;
+      }
+      .wrapper {
+        border: none;
+        z-index: 1;
+        background-color: $dark-03;
+      }
+    }
+  }
+}

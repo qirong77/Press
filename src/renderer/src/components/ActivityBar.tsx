@@ -4,19 +4,18 @@ import { FilesIcon, SearchIcon } from '../assets/icons'
 export const ActivityBar = () => {
   const [active, setActive] = useState(0)
   return (
-    <div className="w-[45px] h-full flex flex-col items-center bg-[#283042] text-slate-400 p-[8px] [&>button]:my-1">
+    <div
+      className={`activity-bar w-[45px] h-full flex flex-col items-center px-[6px] [&>button]:mb-2`}
+    >
       <FilesIcon
-        style={{
-          color: active === 0 ? 'whitesmoke' : ''
-        }}
+        className={`${active === 0 ? 'icon-active' : ''}`}
         onClick={() => {
           setActive(0)
         }}
       />
       <SearchIcon
-        style={{
-          color: active === 1 ? 'whitesmoke' : ''
-        }}
+        className={`${active === 1 ? 'icon-active' : ''}`}
+
         onClick={() => {
           setActive(1)
         }}

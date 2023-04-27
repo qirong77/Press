@@ -14,6 +14,7 @@ import React from 'react'
 
 export const Folders = ({ onOpenFile }) => {
   const [sideWidth, setSideWidth] = useState(240)
+  const minWidth = 180
   const [fileData, setFileData] = useState<PressFile>()
   // 嵌套的组件,每次更新都重新更新并执行整个函数,所以需要再外层进行状态存储
   const folderStatus = useMemo(() => new Map(), [])
@@ -27,16 +28,16 @@ export const Folders = ({ onOpenFile }) => {
     window.api.onMain(GET_ALL_FILES, update)
   }, [])
   return (
-    <div>
+    <div className="folder">
       <div
-        className="fixed w-[6px]  h-full cursor-move hover:bg-blue-400 active:bg-blue-400 z-10"
+        className="drag-line fixed w-[3px]  h-full cursor-move z-10"
         onMouseDown={handleMouseDown}
         style={{
           left: sideWidth + 45 - 3 + 'px'
         }}
       ></div>
       <div
-        className="h-full min-w-[220px] bg-[#333d55]  overflow-scroll"
+        className={`h-full min-w-[${minWidth}] overflow-scroll`}
         style={{
           width: sideWidth
         }}
@@ -51,7 +52,10 @@ export const Folders = ({ onOpenFile }) => {
   function handleMouseDown() {
     document.onmousemove = (e) => {
       const newClientX = e.clientX
-      setSideWidth(newClientX - 50)
+      const positionX = newClientX - 50
+      if (positionX >= minWidth) {
+        setSideWidth(positionX)
+      }
       return false
     }
     // 释放鼠标的时候解除事件绑定
@@ -143,7 +147,7 @@ export const Folders = ({ onOpenFile }) => {
             )}
           </FileItem>
           {newFile === file.path && (
-            <li className="flex items-center h-[30px] text-white p-[2px]">
+            <li className="flex items-center h-[30px] p-[2px]">
               {isNewFolder && (
                 <div className="mx-[6px] [&>button]:w-[20px]">
                   <FolderCloseIcon />
@@ -205,11 +209,12 @@ export const Folders = ({ onOpenFile }) => {
           draggable
           onClick={handleClick}
           onContextMenu={handleContext}
-          className="flex text-slate-100 hover:bg-[#3c4b6f]  justify-start items-center h-[30px] overflow-hidden whitespace-nowrap cursor-pointer"
+          className={`flex file-item justify-start  ${
+            file.path === active ? 'file-item-active' : ''
+          }  items-center h-[30px] overflow-hidden whitespace-nowrap cursor-pointer`}
           style={{
             paddingLeft: file.level * 20 - 20 + 'px',
-            display: file.level === 0 ? 'none' : 'flex',
-            backgroundColor: active === file.path ? '#3c4b6f' : ''
+            display: file.level === 0 ? 'none' : 'flex'
           }}
           onDragStart={handleDragStart}
         >

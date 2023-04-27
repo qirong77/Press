@@ -81,7 +81,7 @@ function IconContainer(props: JSX.IntrinsicElements['button']) {
     <button
       {...props}
       className={
-        '[&>svg]:w-full flex justify-center items-center rounded  hover:cursor-pointer' +
+        'icon [&>svg]:w-full flex justify-center items-center rounded  hover:cursor-pointer' +
           ' ' +
           props.className || ''
       }
