@@ -3,6 +3,7 @@ $dark-02: #282c34;
 $dark-03: #2c313a;
 $font-01: rgb(231, 231, 231);
 $font-02: #abb2bf;
+$font-03: #5c6370;
 input {
   background-color: $dark-01;
   outline: none !important;
@@ -56,13 +57,16 @@ main {
     }
     .slatepad-toolbar {
       border: none;
-      box-shadow: 2px 0px 8px 0px rgb(4 4 4 / 20%);
+      box-shadow: 2px 0px 8px 0px rgb(4 4 4 / 10%);
     }
     .slatepad-code-block {
       background-color: $dark-03;
       box-shadow: 2px 0px 8px 0px rgb(4 4 4 / 3%);
     }
     .slatepad-heading {
+      span {
+        color: #ef596f;
+      }
       // 标题图层
       & > :nth-child(2) {
         position: relative;
@@ -72,6 +76,16 @@ main {
         border: none;
         z-index: 1;
         background-color: $dark-03;
+      }
+    }
+    blockquote {
+      color: $font-03;
+      border-color: $font-03;
+    }
+    ol,
+    ul {
+      li::marker {
+        color: #e5c07b;
       }
     }
   }

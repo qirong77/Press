@@ -107,6 +107,15 @@ export const Folders = ({ onOpenFile }) => {
     function Folder({ file, childs }: { file: PressFile; childs: ReactNode }) {
       const [isOpen, setIsOpen] = useState(file.level === 0 ? true : folderStatus.get(file.path))
       const [isDrag, setIsDrag] = useState(false)
+      const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.code === 'Enter') {
+          const target = e.target as HTMLInputElement
+          if (target.value) {
+            window.api.sendToMain(NEW_FILE, file.path, target.value)
+          }
+          setRename('')
+        }
+      }
       useEffect(() => {
         if (newFile === file.path) setIsOpen(true)
       }, [newFile])
@@ -154,8 +163,9 @@ export const Folders = ({ onOpenFile }) => {
                 </div>
               )}
               <input
-                className="pl-[4px] text-black rounded"
+                className="pl-[4px] rounded"
                 autoFocus
+                onKeyDown={handleKeyDown}
                 onBlur={(e) => {
                   if (e.target.value) {
                     window.api.sendToMain(NEW_FILE, file.path, e.target.value, isNewFolder)
@@ -195,9 +205,9 @@ export const Folders = ({ onOpenFile }) => {
         if (e.code === 'Enter') {
           const target = e.target as HTMLInputElement
           if (target.value) {
-            window.api.sendToMain(RENAME_FILE, file.path, target.value)
+            window.api.sendToMain(NEW_FILE, file.path, target.value, isNewFolder)
+            setNewFile('')
           }
-          setRename('')
         }
       }
       const handleDragStart = (e: React.DragEvent) => {
@@ -231,7 +241,7 @@ export const Folders = ({ onOpenFile }) => {
                   setRename('')
                 }}
                 onKeyDown={handleKeyDown}
-                className="text-black pl-[4px] rounded"
+                className=" pl-[4px] rounded"
               />
             ) : (
               <span>{file.fileName}</span>
