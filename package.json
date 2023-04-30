@@ -25,8 +25,9 @@
     "@electron-toolkit/utils": "^1.0.2",
     "debounce": "^1.2.1",
     "fs-extra": "^11.1.1",
+    "prism-themes": "^1.9.0",
     "sass": "^1.62.1",
-    "slatepad": "^0.3.6"
+    "slatepad": "^0.3.9"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",

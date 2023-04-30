@@ -1,5 +1,4 @@
 import { useMemo, useRef } from 'react'
-
 import { SlatePad, EditorUtils, createSlatepad } from 'slatepad'
 import 'slatepad/dist/style.css'
 import { Folders } from './components/Folders'
@@ -8,6 +7,8 @@ import debounce from 'debounce'
 import { ActivityBar } from './components/ActivityBar'
 import { FileSelector } from './components/FileSelector'
 import { TitleBar } from './components/TitleBar'
+import 'prism-themes/themes/prism-atom-dark.css'
+
 export const App = () => {
   const editor = useMemo(() => createSlatepad(), [])
   const pathRef = useRef('')
