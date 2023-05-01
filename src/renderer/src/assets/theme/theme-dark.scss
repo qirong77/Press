@@ -46,6 +46,17 @@ input {
     color: $font-01;
   }
 }
+.file-selector {
+  background-color: $dark-01;
+  color:$font-02;
+  input {
+    border: 1px solid $font-03 !important;
+  }
+  li.selected {
+    color: $font-01;
+    background: $dark-03;
+  }
+}
 main {
   background-color: $dark-02;
   .slatepad {

@@ -28,7 +28,7 @@ export const App = () => {
       <TitleBar />
       <div className='flex flex-1 overflow-scroll'>
         <ActivityBar />
-        {/* <FileSelector/> */}
+        <FileSelector onOpenFile={onOpenFile}/>
         <Folders onOpenFile={onOpenFile} />
         <main className="flex-1 overflow-scroll">
           <SlatePad onChange={saveData} editor={editor} />
