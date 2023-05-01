@@ -35,5 +35,5 @@ export const getAllFiles = () => {
     return node
   }
   const tree = dfs(targetFolder, 0)
-  return [tree, paths]
+  return [tree, paths, targetFolder]
 }

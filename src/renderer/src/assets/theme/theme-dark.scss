@@ -48,13 +48,18 @@ input {
 }
 .file-selector {
   background-color: $dark-01;
-  color:$font-02;
+  color: $font-02;
   input {
     border: 1px solid $font-03 !important;
   }
   li.selected {
     color: $font-01;
     background: $dark-03;
+  }
+  li {
+    &:hover {
+      background-color: $dark-03;
+    }
   }
 }
 main {

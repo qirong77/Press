@@ -2,18 +2,23 @@ import { useEffect, useRef, useState } from 'react'
 import { GET_ALL_FILES } from '../../../common/const'
 import pinyin from 'pinyin'
 import debounce from 'debounce'
-export const FileSelector = ({ onOpenFile }) => {
+export const FileSelector = ({ onOpenFile, show, setHidden }) => {
   const [allPaths, setAllPaths] = useState([{ path: '', name: '' }])
   const [paths, setPaths] = useState([{ path: '', name: '', match: 0 }])
+  const [basePath, setBasePath] = useState('')
   const [active, setActive] = useState(0)
   const iptRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     window.api.interProcess(GET_ALL_FILES).then((value) => {
-      const [, paths] = value
+      const [, paths, rootPath] = value
       setAllPaths(paths)
       setPaths(paths)
+      setBasePath(rootPath)
     })
   }, [])
+  useEffect(() => {
+    show && iptRef.current?.focus()
+  }, [show])
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowUp') {
       e.preventDefault()
@@ -50,15 +55,16 @@ export const FileSelector = ({ onOpenFile }) => {
     <div
       className="file-selector fixed top-[0] z-6 left-[50%] p-[8px] translate-x-[-50%]  w-[400px] h-[280px] z-50 rounded "
       style={{
-        boxShadow: 'rgb(4 4 4 / 25%) 0px 4px 6px 3px'
+        boxShadow: 'rgb(4 4 4 / 25%) 0px 4px 6px 3px',
+        display: show ? 'block' : 'none'
       }}
     >
       <div>
         <input
-          autoFocus
           ref={iptRef}
           onKeyDown={handleKeyDown}
           onChange={handleChange}
+          onBlur={setHidden}
           type="text"
           className="outline-none w-full rounded pl-[3px]"
         />
@@ -66,13 +72,18 @@ export const FileSelector = ({ onOpenFile }) => {
       <ul className="my-[6px] overflow-scroll">
         {paths.map(({ name, path }, index) => (
           <li
-            className={`list-none rounded px-[20px] py-[2px] flex items-center ${
+            onMouseDown={(e) => {
+              e.preventDefault()
+              onOpenFile(path)
+              setHidden()
+            }}
+            className={`list-none cursor-pointer rounded px-[20px] py-[2px] flex items-center ${
               index === active ? 'selected' : ''
             }`}
             key={path}
           >
             <span className="text-sm">{name + '  '}</span>
-            <span className="ml-[6px] text-xs">{path}</span>
+            <span className="ml-[6px] text-xs">{path.replace(basePath, '')}</span>
           </li>
         ))}
       </ul>
