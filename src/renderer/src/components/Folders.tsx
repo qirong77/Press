@@ -16,7 +16,7 @@ export const Folders = ({ onOpenFile }) => {
   const [sideWidth, setSideWidth] = useState(240)
   const minWidth = 180
   const [fileData, setFileData] = useState<PressFile>()
-  // 嵌套的组件,每次更新都重新更新并执行整个函数,所以需要再外层进行状态存储
+  // 嵌套的组件,每次更新都重新更新并执行整个函数,所以需要在外层进行状态存储
   const folderStatus = useMemo(() => new Map(), [])
   useEffect(() => {
     const update = () =>
@@ -111,7 +111,7 @@ export const Folders = ({ onOpenFile }) => {
         if (e.code === 'Enter') {
           const target = e.target as HTMLInputElement
           if (target.value) {
-            window.api.sendToMain(NEW_FILE, file.path, target.value)
+            window.api.sendToMain(NEW_FILE, file.path, target.value, isNewFolder)
           }
           setRename('')
         }

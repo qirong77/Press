@@ -38,9 +38,8 @@ export const onRenderer = () => {
       .then(() => {
         e.sender.send(GET_ALL_FILES)
       })
-      .catch((error) => {
+      .catch((_error) => {
         // 反向移动文件夹等操作是不行的,如将外层文件夹移动到内层
-        console.log(error)
         throw new Error('操作失败')
       })
   })

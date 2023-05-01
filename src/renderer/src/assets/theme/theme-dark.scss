@@ -6,7 +6,7 @@ $font-02: #abb2bf;
 $font-03: #5c6370;
 input {
   background-color: $dark-01;
-  outline: none ;
+  outline: none;
   color: $font-01 !important;
   border: 1px solid $dark-01 !important;
   &:focus {
@@ -67,9 +67,18 @@ main {
       pre {
         background-color: $dark-03;
         ::selection {
-          background:$font-03 !important; 
+          background: $font-03 !important;
         }
       }
+    }
+    .slatepad-hovering-toolbar {
+      & > div {
+        background: $dark-01;
+      }
+    }
+    p code {
+      color: #89ca78;
+      background: none;
     }
     .slatepad-heading {
       span {
@@ -86,9 +95,9 @@ main {
         background-color: $dark-03;
       }
     }
-.slatepad-side {
-  border-color: $dark-01;
-}
+    .slatepad-side {
+      border-color: $dark-01;
+    }
     blockquote {
       color: $font-03;
       border-color: $font-03;

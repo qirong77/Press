@@ -27,7 +27,7 @@
     "fs-extra": "^11.1.1",
     "prism-themes": "^1.9.0",
     "sass": "^1.62.1",
-    "slatepad": "^0.3.9"
+    "slatepad": "^0.4.6"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",

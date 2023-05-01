@@ -4,8 +4,8 @@ import path from 'path'
 
 export const createWindow = () => {
   const window = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 1200,
+    height: 900,
     show: false,
     titleBarStyle: 'hidden',
     autoHideMenuBar: true,
