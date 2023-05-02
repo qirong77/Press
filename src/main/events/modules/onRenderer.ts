@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron'
+import { BrowserWindow, ipcMain } from 'electron'
 import {
   FILE_MENU,
   FOLDER_MENU,
@@ -6,7 +6,8 @@ import {
   MOVE_FILE,
   NEW_FILE,
   RENAME_FILE,
-  SAVE_FILE
+  SAVE_FILE,
+  TOOGLE_DEVTOOL
 } from '../../../common/const'
 import { existsSync, writeFileSync } from 'fs'
 import { handleFolderMenu, hanldeFileMenu } from '../helper/showMenu'
@@ -15,7 +16,7 @@ import { rename } from 'fs/promises'
 import { basename, resolve } from 'path'
 import { move } from 'fs-extra'
 
-export const onRenderer = () => {
+export const onRenderer = (window: BrowserWindow) => {
   ipcMain.on(SAVE_FILE, (_e, filePath, content = '') => {
     existsSync(filePath) && writeFileSync(filePath, content, 'utf-8')
   })
@@ -43,4 +44,9 @@ export const onRenderer = () => {
         throw new Error('操作失败')
       })
   })
+  ipcMain.on(TOOGLE_DEVTOOL, () =>
+    window.webContents.isDevToolsOpened()
+      ? window.webContents.closeDevTools()
+      : window.webContents.openDevTools()
+  )
 }

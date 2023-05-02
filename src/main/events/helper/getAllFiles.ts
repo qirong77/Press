@@ -5,8 +5,8 @@ import { PressFile } from '../../../common/types'
 
 export const getAllFiles = () => {
   const paths: any[] = []
-  // const targetFolder = join(homedir(), 'Desktop', 'PressNotes')
-  const targetFolder = join(homedir(), 'Desktop', 'press-test')
+  const targetFolder = join(homedir(), 'Desktop', 'PressNotes')
+  // const targetFolder = join(homedir(), 'Desktop', 'press-test')
   const dfs = (path: string, level = 0) => {
     const node: PressFile = {
       fileName: basename(path),

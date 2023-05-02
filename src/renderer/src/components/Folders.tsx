@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useMemo, useState } from 'react'
-import { Arrow, FolderCloseIcon } from '../assets/icons'
+import { Arrow, FolderCloseIcon, FolderOpenIcon } from '../assets/icons'
 import {
   FILE_MENU,
   FOLDER_MENU,
@@ -151,7 +151,7 @@ export const Folders = ({ onOpenFile }) => {
             {file.isDir && (
               <>
                 <Arrow className={`p-[3px] ${isOpen ? '' : '-rotate-90'}`} />
-                <FolderCloseIcon />
+                {isOpen ? <FolderOpenIcon /> : <FolderCloseIcon />}
               </>
             )}
           </FileItem>

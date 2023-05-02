@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: press
+productName: Press
 directories:
   buildResources: build
 files:

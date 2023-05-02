@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { SlatePad, EditorUtils, createSlatepad } from 'slatepad'
 import 'slatepad/dist/style.css'
 import { Folders } from './components/Folders'
-import { GET_FILE_CONTENT, SAVE_FILE } from '../../common/const'
+import { GET_FILE_CONTENT, SAVE_FILE, TOOGLE_DEVTOOL } from '../../common/const'
 import debounce from 'debounce'
 import { ActivityBar } from './components/ActivityBar'
 import { FileSelector } from './components/FileSelector'
@@ -29,6 +29,9 @@ export const App = () => {
       if (e.metaKey && e.code === 'KeyP') {
         setShowFileSelector(!showFileSelector)
       }
+      if (e.code === 'F12') {
+        window.api.sendToMain(TOOGLE_DEVTOOL)
+      }
     }
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
@@ -36,7 +39,6 @@ export const App = () => {
   return (
     <div className="w-[100vw] h-[100vh] flex flex-col">
       <TitleBar />
-
       <div className="flex flex-1 overflow-scroll">
         <ActivityBar />
         <FileSelector
