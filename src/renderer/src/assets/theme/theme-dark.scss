@@ -113,6 +113,16 @@ main {
     }
     .slatepad-side {
       border-color: $dark-01;
+      li {
+        &:hover {
+          color: $font-01;
+        }
+        > span {
+          &:hover {
+            background-color: $dark-03;
+          }
+        }
+      }
     }
     blockquote {
       color: $font-03;

@@ -69,7 +69,7 @@ export const FileSelector = ({ onOpenFile, show, setHidden }) => {
           className="outline-none w-full rounded pl-[3px]"
         />
       </div>
-      <ul className="my-[6px] overflow-scroll">
+      <ul className="my-[6px] overflow-scroll h-[250px]">
         {paths.map(({ name, path }, index) => (
           <li
             onMouseDown={(e) => {

@@ -8,5 +8,11 @@
     <true/>
     <key>com.apple.security.cs.allow-dyld-environment-variables</key>
     <true/>
+    <key>NSAppleEventsUsageDescription</key>
+    <true/>
+    <key>NSFileReadAccess</key>
+    <true/>
+    <key>NSFileWriteAccess</key>
+    <true/>
   </dict>
 </plist>
