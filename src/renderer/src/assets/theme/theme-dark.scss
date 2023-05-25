@@ -132,6 +132,9 @@ main {
         background-color: $dark-01;
         color: $font-01;
       }
+      tr:nth-child(even) {
+        background-color: $dark-03;
+      }
     }
     blockquote {
       color: $font-03;
