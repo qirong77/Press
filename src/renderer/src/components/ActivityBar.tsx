@@ -11,11 +11,11 @@ export const ActivityBar = () => {
         className={`${active === 0 ? 'icon-active' : ''}`}
         onClick={() => {
           setActive(0)
+          document.querySelector('.folder')?.classList.toggle('hidden')
         }}
       />
       <SearchIcon
         className={`${active === 1 ? 'icon-active' : ''}`}
-
         onClick={() => {
           setActive(1)
         }}

@@ -34,6 +34,7 @@ export const FileSelector = ({ onOpenFile, show, setHidden }) => {
       iptRef.current!.value = ''
       onOpenFile(paths[active].path)
       setActive(0)
+      setHidden()
     }
   }
   const handleChange = debounce((e) => {

@@ -124,6 +124,15 @@ main {
         }
       }
     }
+    .slatepad-table {
+      td {
+        border-color: $font-03;
+      }
+      .slatepad-table-size {
+        background-color: $dark-01;
+        color: $font-01;
+      }
+    }
     blockquote {
       color: $font-03;
       border-color: $font-03;
