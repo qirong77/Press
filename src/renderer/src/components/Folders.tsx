@@ -114,6 +114,7 @@ export const Folders = ({ onOpenFile }) => {
           const target = e.target as HTMLInputElement
           if (target.value) {
             window.api.sendToMain(NEW_FILE, file.path, target.value, isNewFolder)
+            folderStatus.set(contextActive, true)
           }
           setRename('')
         }
@@ -171,6 +172,7 @@ export const Folders = ({ onOpenFile }) => {
                 onBlur={(e) => {
                   if (e.target.value) {
                     window.api.sendToMain(NEW_FILE, file.path, e.target.value, isNewFolder)
+                    folderStatus.set(contextActive, true)
                   }
                   setNewFile('')
                 }}
