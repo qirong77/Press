@@ -11,6 +11,7 @@ export const ActivityBar = () => {
         className={`${active === 0 ? 'icon-active' : ''}`}
         onClick={() => {
           setActive(0)
+          // 隐藏侧边栏
           document.querySelector('.folder')?.classList.toggle('hidden')
         }}
       />

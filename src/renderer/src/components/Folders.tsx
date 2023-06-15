@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { Arrow, FolderCloseIcon, FolderOpenIcon } from '../assets/icons'
 import {
+  FILE_CHANGE,
   FILE_MENU,
   FOLDER_MENU,
   GET_ALL_FILES,
@@ -26,6 +27,7 @@ export const Folders = ({ onOpenFile }) => {
       })
     update()
     window.api.onMain(GET_ALL_FILES, update)
+    window.api.onMain(FILE_CHANGE, update)
   }, [])
   return (
     <div className="folder">
@@ -205,7 +207,7 @@ export const Folders = ({ onOpenFile }) => {
         if (e.code === 'Enter') {
           const target = e.target as HTMLInputElement
           if (target.value) {
-            window.api.sendToMain(NEW_FILE, file.path, target.value, isNewFolder)
+            window.api.sendToMain(RENAME_FILE, file.path, target.value)
             setNewFile('')
           }
         }

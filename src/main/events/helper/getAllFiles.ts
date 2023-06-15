@@ -1,11 +1,10 @@
 import { lstatSync, readdirSync } from 'fs'
 import { basename, resolve } from 'path'
 import { PressFile } from '../../../common/types'
+import { BASE_PATH } from '../../const'
 
 export const getAllFiles = () => {
   const paths: any[] = []
-  const targetFolder = '/Users/qirong77/Documents/PressNotes'
-  // const targetFolder = join(homedir(), 'Desktop', 'press-test')
   const dfs = (path: string, level = 0) => {
     const node: PressFile = {
       fileName: basename(path),
@@ -33,6 +32,6 @@ export const getAllFiles = () => {
     node.children = [...files, ...folders]
     return node
   }
-  const tree = dfs(targetFolder, 0)
-  return [tree, paths, targetFolder]
+  const tree = dfs(BASE_PATH, 0)
+  return [tree, paths, BASE_PATH]
 }

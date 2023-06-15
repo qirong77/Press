@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { GET_ALL_FILES } from '../../../common/const'
+import { FILE_CHANGE, GET_ALL_FILES } from '../../../common/const'
 import pinyin from 'pinyin'
 import debounce from 'debounce'
 export const FileSelector = ({ onOpenFile, show, setHidden }) => {
@@ -9,12 +9,16 @@ export const FileSelector = ({ onOpenFile, show, setHidden }) => {
   const [active, setActive] = useState(0)
   const iptRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
-    window.api.interProcess(GET_ALL_FILES).then((value) => {
-      const [, paths, rootPath] = value
-      setAllPaths(paths)
-      setPaths(paths)
-      setBasePath(rootPath)
-    })
+    const update = () => {
+      window.api.interProcess(GET_ALL_FILES).then((value) => {
+        const [, paths, rootPath] = value
+        setAllPaths(paths)
+        setPaths(paths)
+        setBasePath(rootPath)
+      })
+    }
+    update()
+    window.api.onMain(FILE_CHANGE, update)
   }, [])
   useEffect(() => {
     show && iptRef.current?.focus()
