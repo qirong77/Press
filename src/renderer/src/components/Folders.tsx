@@ -12,7 +12,7 @@ import {
 } from '../../../common/const'
 import { PressFile } from '../../../common/types'
 import React from 'react'
-
+import { ACTIVITY_BAR_WIDTH } from '../const'
 export const Folders = ({ onOpenFile }) => {
   const [sideWidth, setSideWidth] = useState(240)
   const minWidth = 180
@@ -35,7 +35,7 @@ export const Folders = ({ onOpenFile }) => {
         className="drag-line fixed w-[3px]  h-full cursor-move z-10"
         onMouseDown={handleMouseDown}
         style={{
-          left: sideWidth + 45 - 3 + 'px'
+          left: sideWidth + ACTIVITY_BAR_WIDTH - 3 + 'px'
         }}
       ></div>
       <div
@@ -54,7 +54,7 @@ export const Folders = ({ onOpenFile }) => {
   function handleMouseDown() {
     document.onmousemove = (e) => {
       const newClientX = e.clientX
-      const positionX = newClientX - 50
+      const positionX = newClientX - ACTIVITY_BAR_WIDTH
       if (positionX >= minWidth) {
         setSideWidth(positionX)
       }
@@ -227,7 +227,7 @@ export const Folders = ({ onOpenFile }) => {
             file.path === active ? 'file-item-active' : ''
           }  items-center h-[30px] overflow-hidden whitespace-nowrap cursor-pointer`}
           style={{
-            paddingLeft: file.level * 20 - 20 + 'px',
+            paddingLeft: file.level * 20 + 'px',
             display: file.level === 0 ? 'none' : 'flex'
           }}
           onDragStart={handleDragStart}
